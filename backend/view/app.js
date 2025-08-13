@@ -1,15 +1,14 @@
 const express = require("express");
 const app = express();
-const mongoose = require("mongoose");
+const mongoDbConfig = require("../controller/config/mongodb-connection-config.js");
+const userController = require("../controller/user-controller.js");
+const cors = require("cors");
 
 require("dotenv").config()
 
-mongoose.connect(process.env.DATABASE_CONNECTION)
-.then(()=>{
-    console.info("Mongodb Connected");
-}).catch(error => {
-    console.error("An error was presented: " + error);
-});
+app.use(cors());
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 
 app.get(`${process.env.BASE_PATH}/health`, (req, res)=>{
     res.json({
@@ -18,5 +17,14 @@ app.get(`${process.env.BASE_PATH}/health`, (req, res)=>{
     })
 });
 
+app.use(`${process.env.BASE_PATH}/users`, userController);
 
-app.listen(process.env.PORT, ()=> console.info(`Server listen in port ${process.env.PORT}`));
+const startServer = async () => {
+    await mongoDbConfig;
+    app.listen(process.env.PORT, () =>
+      console.info(`Server listen in port ${process.env.PORT}`)
+    );
+}
+
+startServer();
+  
