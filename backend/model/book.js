@@ -11,7 +11,7 @@ const bookSchema = new Schema(
       type: String,
       required: true,
     },
-    Category: String,
+    category: String,
     state: {
       type: String,
       enum: ["loaned", "available"],
