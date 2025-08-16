@@ -1,7 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
-import { RouterLink } from '@angular/router';
+import { RouterLink, Router } from '@angular/router';
 
 @Component({
   selector: 'app-login',
@@ -12,7 +12,7 @@ import { RouterLink } from '@angular/router';
 export class Login {
   loginForm: FormGroup;
 
-  constructor(private fb: FormBuilder) {
+  constructor(private fb: FormBuilder, private router:Router) {
     this.loginForm = this.fb.group({
       username: ['', [Validators.required, Validators.email]],
       password: ['', [Validators.required]]
@@ -23,6 +23,7 @@ export class Login {
     if (this.loginForm.valid) {
       console.log('Datos de login:', this.loginForm.value);
       this.loginForm.reset();
+      this.router.navigateByUrl("/main")
     } else {
       this.loginForm.markAllAsTouched();
     }

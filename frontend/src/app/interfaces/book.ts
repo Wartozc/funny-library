@@ -1,0 +1,9 @@
+export interface Book {
+  title: string,
+  author: string,
+  year: number,
+  description: string,
+  image: string,
+  category: string,
+  state: 'loaned' | 'available',
+}

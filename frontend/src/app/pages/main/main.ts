@@ -1,11 +1,107 @@
-import { Component } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { Component, OnInit } from '@angular/core';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-main',
-  imports: [],
+  imports: [FormsModule, CommonModule],
   templateUrl: './main.html',
-  styleUrl: './main.scss'
+  styleUrl: './main.scss',
 })
-export class Main {
+export class Main implements OnInit {
+  books: Book[] = [
+    {
+      title: 'El Quijote',
+      author: 'Miguel de Cervantes',
+      year: 1605,
+      description: 'Una de las obras más destacadas de la literatura universal.',
+      image: 'library.jpeg',
+      category: 'Novela',
+      state: 'available',
+    },
+    {
+      title: 'Cien Años de Soledad',
+      author: 'Gabriel García Márquez',
+      year: 1967,
+      description: 'Historia de la familia Buendía en Macondo.',
+      image: 'library.jpeg',
+      category: 'Realismo mágico',
+      state: 'loaned',
+    },
+    {
+      title: 'Clean Code',
+      author: 'Robert C. Martin',
+      year: 2008,
+      description: 'Guía para escribir código limpio y mantenible.',
+      image: 'library.jpeg',
+      category: 'Programación',
+      state: 'available',
+    },
+  ];
 
+  filteredBooks: Book[] = [];
+  selectedState: string = 'all';
+  selectedCategory: string = 'all';
+  categories: string[] = [];
+
+  selectedBook: Book | null = null;
+  loan: Loan = {
+    bookId: '',
+    documentNumberUser: '',
+    bookName: '',
+    userName: '',
+    loanDate: '',
+    loanTime: 0,
+  };
+
+  user = {
+    name: 'Walther Zapata',
+    email: 'wartozc@gmail.com',
+  };
+
+  ngOnInit(): void {
+    this.filteredBooks = [...this.books];
+    this.categories = Array.from(new Set(this.books.map((b) => b.category)));
+  }
+
+  filterBooks() {
+    this.filteredBooks = this.books.filter((book) => {
+      const stateMatch = this.selectedState === 'all' || book.state === this.selectedState;
+      const categoryMatch =
+        this.selectedCategory === 'all' || book.category === this.selectedCategory;
+      return stateMatch && categoryMatch;
+    });
+  }
+
+  openLoanModal(book: Book) {
+    this.selectedBook = book;
+    this.loan = {
+      bookId: book.title + '-' + Math.random().toString(36).substring(2, 9), // id ficticio
+      documentNumberUser: '',
+      bookName: book.title,
+      userName: '',
+      loanDate: '',
+      loanTime: 0,
+    };
+
+    const modal = new bootstrap.Modal(document.getElementById('loanModal'));
+    modal.show();
+  }
+
+  submitLoan() {
+    console.log('Préstamo registrado:', this.loan);
+    if (this.selectedBook) {
+      this.selectedBook.state = 'loaned';
+      this.filterBooks();
+    }
+
+    const modal = bootstrap.Modal.getInstance(document.getElementById('loanModal'));
+    modal.hide();
+  }
+
+  logout() {
+    console.log('Cerrando sesión...');
+    localStorage.clear();
+    window.location.href = '/login';
+  }
 }

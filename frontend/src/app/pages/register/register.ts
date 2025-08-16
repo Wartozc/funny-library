@@ -27,7 +27,10 @@ export class Register implements OnInit {
   }
 
   onSubmit() {
-    if (this.registerForm.valid) {
+    if (
+      this.registerForm.valid &&
+      this.registerForm.get('password') === this.registerForm.get('passwordConfirmed')
+    ) {
       console.log(this.registerForm.value);
       this.registerForm.reset();
     } else {

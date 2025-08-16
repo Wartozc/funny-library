@@ -3,6 +3,7 @@ import { Main } from './pages/main/main';
 import { Login } from './pages/login/login';
 import { Register } from './pages/register/register';
 import { ForgetPassword } from './pages/forget-password/forget-password';
+import { Maintenances } from './pages/maintenances/maintenances';
 
 export const routes: Routes = [
   {
@@ -19,10 +20,12 @@ export const routes: Routes = [
   },
   {
     path: 'maintenances',
+    component: Maintenances,
     loadChildren: () => import('./maintenances.routes'),
   },
   {
-    path: 'forget-password', component: ForgetPassword
+    path: 'forget-password',
+    component: ForgetPassword,
   },
   {
     path: '**',
