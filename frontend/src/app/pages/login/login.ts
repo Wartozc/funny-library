@@ -1,7 +1,8 @@
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
+import { Component, effect, inject } from '@angular/core';
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { RouterLink, Router } from '@angular/router';
+import { Users } from '../../services/users';
 
 @Component({
   selector: 'app-login',
@@ -11,6 +12,7 @@ import { RouterLink, Router } from '@angular/router';
 })
 export class Login {
   loginForm: FormGroup;
+  userService = inject(Users);
 
   constructor(private fb: FormBuilder, private router:Router) {
     this.loginForm = this.fb.group({
@@ -21,9 +23,13 @@ export class Login {
 
   onSubmit() {
     if (this.loginForm.valid) {
-      console.log('Datos de login:', this.loginForm.value);
+      this.userService
+        .loginUser(this.loginForm.get('username')?.value, this.loginForm.get('password')?.value)
+        .subscribe(
+          (isOk) => this.router.navigateByUrl('/main'),
+          (error) => alert('Usuario y/o contaseña inválidos')
+        );
       this.loginForm.reset();
-      this.router.navigateByUrl("/main")
     } else {
       this.loginForm.markAllAsTouched();
     }

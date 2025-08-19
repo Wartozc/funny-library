@@ -1,7 +1,8 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
-import { RouterLink } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
+import { Users } from '../../services/users';
 
 @Component({
   selector: 'app-register',
@@ -12,7 +13,7 @@ import { RouterLink } from '@angular/router';
 export class Register implements OnInit {
   registerForm!: FormGroup;
 
-  constructor(private fb: FormBuilder) {}
+  constructor(private fb: FormBuilder, private userService: Users, private router:Router) {}
 
   ngOnInit(): void {
     this.registerForm = this.fb.group({
@@ -29,12 +30,15 @@ export class Register implements OnInit {
   onSubmit() {
     if (
       this.registerForm.valid &&
-      this.registerForm.get('password') === this.registerForm.get('passwordConfirmed')
+      this.registerForm.get('password')!.value === this.registerForm.get('passwordConfirmed')!.value
     ) {
-      console.log(this.registerForm.value);
-      this.registerForm.reset();
+      this.userService.registerUser(this.registerForm.value).subscribe((user) => {
+        alert(`el usuario ${user.name} con correo ${user.email}, ha sido registrado correctamente`);
+        this.router.navigateByUrl('/login');
+      }, error => alert("Número de documento y/o correo electrónico ya se encuentran registrados, por favor revise los datos ingresados o utilice datos diferentes"));
     } else {
       this.registerForm.markAllAsTouched();
+      this.registerForm.reset();
     }
   }
 }

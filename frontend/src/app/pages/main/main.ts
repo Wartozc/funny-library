@@ -3,6 +3,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { Book } from '../../interfaces/book';
 import { Loan } from '../../interfaces/loan';
+import { Users } from '../../services/users';
 
 @Component({
   selector: 'app-main',
@@ -61,6 +62,10 @@ export class Main implements OnInit {
     email: 'wartozc@gmail.com',
   };
 
+  constructor(private userService: Users){
+
+  }
+
   ngOnInit(): void {
     this.filteredBooks = [...this.books];
     this.categories = Array.from(new Set(this.books.map((b) => b.category)));
@@ -102,8 +107,6 @@ export class Main implements OnInit {
   }
 
   logout() {
-    console.log('Cerrando sesión...');
-    localStorage.clear();
-    window.location.href = '/login';
+    this.userService.logout()
   }
 }

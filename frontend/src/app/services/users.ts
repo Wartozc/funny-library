@@ -1,6 +1,6 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
+import { Injectable, signal } from '@angular/core';
+import { map, Observable, of } from 'rxjs';
 import { User } from '../interfaces/user';
 
 @Injectable({
@@ -8,6 +8,7 @@ import { User } from '../interfaces/user';
 })
 export class Users {
   basePath = 'http://localhost:3000/api/v1/funny-library/users';
+  userIsAuthenticated = signal<boolean>(false);
 
   constructor(private http: HttpClient) {}
 
@@ -27,15 +28,29 @@ export class Users {
     });
   }
 
-  deleteUser(userId:string){
+  deleteUser(userId: string) {
     return this.http.delete(`${this.basePath}/${userId}`, {
       headers: this.getHeaderAuthorization(),
     });
   }
 
-  getJwt() {
-    const jwt =
-      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6IndhcnRvemNAZ21haWwuY29tIiwicm9sIjoiYWRtaW4iLCJ1c2VyTmFtZSI6IldhbHRoZXIgWmFwYXRhIiwiaWF0IjoxNzU1NjM2ODExLCJleHAiOjE3NTU2NDA0MTF9.LLAccP1Z063LHiyVELMcV6AkwB9lRjyaBnAkrACJnV4';
+  loginUser(email: string, password: string): Observable<boolean> {
+    return this.http.post<{ token: string }>(`${this.basePath}/login`, { email, password }).pipe(
+      map((jwt) => {
+        localStorage.setItem('jwt', jwt.token);
+        this.userIsAuthenticated.update((value) => true);
+        return true;
+      })
+    );
+  }
+
+  logout() {
+    localStorage.clear();
+    window.location.href = '/login';
+  }
+
+  getJwt(): string {
+    const jwt = localStorage.getItem('jwt');
     return `Bearer ${jwt}`;
   }
 
