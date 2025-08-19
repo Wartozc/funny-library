@@ -1,4 +1,5 @@
 export interface User {
+  id: string,
   name: string;
   documentNumber: string;
   documentType: string;
