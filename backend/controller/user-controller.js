@@ -37,7 +37,7 @@ router.post("/login", async (req, res) => {
     if (!isMatch)
       return res.status(401).json({ message: "Unauthorized" });
 
-    const token = jwt.sign({ email }, process.env.JWT_SECRET, {
+    const token = jwt.sign({ email, rol : user.rol, userName: user.name }, process.env.JWT_SECRET, {
       expiresIn: "1h",
     });
     return res.json({ token });
