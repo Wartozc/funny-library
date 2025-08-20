@@ -18,7 +18,9 @@ export class Books {
   }
 
   registerBook(book: Book): Observable<Book> {
-    return this.http.post<Book>(`${this.basePath}/register`, book);
+    return this.http.post<Book>(`${this.basePath}`, book, {
+      headers: this.getHeaderAuthorization(),
+    });
   }
 
   updateBook(book: Book): Observable<Book> {

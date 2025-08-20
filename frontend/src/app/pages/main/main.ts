@@ -16,6 +16,7 @@ import { Router } from '@angular/router';
 export class Main implements OnInit {
   books: Book[] = [
     {
+      id: '',
       title: 'El Quijote',
       author: 'Miguel de Cervantes',
       year: 1605,
@@ -25,6 +26,7 @@ export class Main implements OnInit {
       state: 'available',
     },
     {
+      id: '',
       title: 'Cien Años de Soledad',
       author: 'Gabriel García Márquez',
       year: 1967,
@@ -34,6 +36,7 @@ export class Main implements OnInit {
       state: 'loaned',
     },
     {
+      id: '',
       title: 'Clean Code',
       author: 'Robert C. Martin',
       year: 2008,
@@ -66,7 +69,7 @@ export class Main implements OnInit {
     const token = localStorage.getItem('jwt');
     this.user = userService.getUserRole(token!);
 
-    if(this.user?.rol==='admin') this.isUserAdmin = true;
+    if (this.user?.rol === 'admin') this.isUserAdmin = true;
   }
 
   ngOnInit(): void {
@@ -113,7 +116,7 @@ export class Main implements OnInit {
     this.userService.logout();
   }
 
-  goToMaintenances(){
+  goToMaintenances() {
     this.router.navigateByUrl('/maintenances');
   }
 }

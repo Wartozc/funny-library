@@ -1,8 +1,8 @@
 import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { User } from '../../interfaces/user';
 import { Book } from '../../interfaces/book';
+import { Books } from '../../services/books';
 
 @Component({
   selector: 'app-maintenances-books',
@@ -11,27 +11,22 @@ import { Book } from '../../interfaces/book';
   styleUrl: './maintenances-books.scss',
 })
 export class MaintenancesBooks {
-  books: Book[] = [
-    {
-      title: 'Clean Code',
-      author: 'Robert C. Martin',
-      year: 2008,
-      description: 'A Handbook of Agile Software Craftsmanship',
-      image: 'https://m.media-amazon.com/images/I/41SH-SvWPxL._SX374_BO1,204,203,200_.jpg',
-      category: 'Software',
-      state: 'available',
-    },
-  ];
+  books: Book[] = [];
 
   selectedBook: Book | null = null;
   modalOpen = false;
   isEditMode = false;
+
+  constructor(private bookService: Books){
+    bookService.getBooks().subscribe(newBooks => this.books = newBooks);
+  }
 
   openModal(book?: Book) {
     this.isEditMode = !!book;
     this.selectedBook = book
       ? { ...book }
       : {
+          id: '',
           title: '',
           author: '',
           year: new Date().getFullYear(),
@@ -47,14 +42,19 @@ export class MaintenancesBooks {
     if (this.isEditMode && this.selectedBook) {
       const index = this.books.findIndex((b) => b.title === this.selectedBook!.title);
       this.books[index] = this.selectedBook!;
+      this.bookService.updateBook(this.selectedBook!).subscribe(updateBook => console.log(updateBook));
     } else {
-      this.books.push(this.selectedBook!);
+      this.bookService
+        .registerBook(this.selectedBook!)
+        .subscribe((newBook) => this.books.push(newBook));
     }
     this.closeModal();
   }
 
   deleteBook(book: Book) {
-    this.books = this.books.filter((b) => b !== book);
+    this.bookService
+      .deleteBook(book.id)
+      .subscribe((isDeleted) => (this.books = this.books.filter((b) => b !== book)));
   }
 
   closeModal() {
