@@ -54,6 +54,7 @@ export class Main implements OnInit {
 
   selectedBook: Book | null = null;
   loan: Loan = {
+    id: '',
     bookId: '',
     documentNumberUser: '',
     bookName: '',
@@ -89,6 +90,7 @@ export class Main implements OnInit {
   openLoanModal(book: Book) {
     this.selectedBook = book;
     this.loan = {
+      id: '',
       bookId: book.title + '-' + Math.random().toString(36).substring(2, 9),
       documentNumberUser: '',
       bookName: book.title,

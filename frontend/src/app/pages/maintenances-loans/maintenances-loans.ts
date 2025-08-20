@@ -2,6 +2,7 @@ import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Loan } from '../../interfaces/loan';
+import { Loans } from '../../services/loans';
 
 @Component({
   selector: 'app-maintenances-loans',
@@ -10,16 +11,7 @@ import { Loan } from '../../interfaces/loan';
   styleUrl: './maintenances-loans.scss',
 })
 export class MaintenancesLoans {
-  loans: Loan[] = [
-    {
-      bookId: 'B001',
-      documentNumberUser: '1039886502',
-      bookName: 'Clean Code',
-      userName: 'Walter Zapata',
-      loanDate: '2025-08-15',
-      loanTime: 7,
-    },
-  ];
+  loans: Loan[] = [];
 
   showModal = false;
   isEdit = false;
@@ -27,9 +19,14 @@ export class MaintenancesLoans {
 
   form: Loan = this.emptyForm();
 
+  constructor(private loanService: Loans){
+    this.loanService.getLoans().subscribe(listedLoans => this.loans = listedLoans);
+  }
+
   private emptyForm(): Loan {
     const today = new Date().toISOString().slice(0, 10);
     return {
+      id : '',
       bookId: '',
       documentNumberUser: '',
       bookName: '',
@@ -55,14 +52,18 @@ export class MaintenancesLoans {
 
   save() {
     if (this.isEdit && this.selectedIndex !== null) {
+      this.loanService.updateLoan({ ...this.form }).subscribe();
       this.loans[this.selectedIndex] = { ...this.form };
     } else {
-      this.loans.push({ ...this.form });
+      this.loanService
+        .registerLoan(this.form)
+        .subscribe((loanUpdated) => this.loans.push({ ...loanUpdated }));
     }
     this.close();
   }
 
-  remove(index: number) {
+  remove(index: number, id: string) {
+    this.loanService.deleteLoan(id).subscribe();
     this.loans.splice(index, 1);
   }
 
