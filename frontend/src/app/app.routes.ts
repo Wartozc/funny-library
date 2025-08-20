@@ -4,10 +4,13 @@ import { Login } from './pages/login/login';
 import { Register } from './pages/register/register';
 import { ForgetPassword } from './pages/forget-password/forget-password';
 import { Maintenances } from './pages/maintenances/maintenances';
+import { maintenanceGuard } from './guards/maintenance-guard';
+import { userGuard } from './guards/user-guard';
 
 export const routes: Routes = [
   {
     path: 'main',
+    canActivate : [userGuard],
     component: Main,
   },
   {
@@ -20,6 +23,7 @@ export const routes: Routes = [
   },
   {
     path: 'maintenances',
+    canActivate: [maintenanceGuard],
     component: Maintenances,
     loadChildren: () => import('./maintenances.routes'),
   },
