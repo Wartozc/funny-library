@@ -1,5 +1,5 @@
 export interface Loan {
-  bookId: string;
+  id: string;
   documentNumberUser: string;
   bookName: string;
   userName: string;
