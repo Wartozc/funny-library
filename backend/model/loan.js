@@ -5,7 +5,7 @@ const loanSchema = new Schema({
     bookId:String,
     documentNumberUser:String,
     bookName:String,
-    UserName:String,
+    userName:String,
     loanDate:String,
     loanTime: Number
 },
