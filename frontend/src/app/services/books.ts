@@ -17,6 +17,12 @@ export class Books {
     });
   }
 
+  getBookById(id: string): Observable<Book> {
+    return this.http.get<Book>(`${this.basePath}/${id}`, {
+      headers: this.getHeaderAuthorization(),
+    });
+  }
+
   registerBook(book: Book): Observable<Book> {
     return this.http.post<Book>(`${this.basePath}`, book, {
       headers: this.getHeaderAuthorization(),

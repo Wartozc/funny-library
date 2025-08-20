@@ -3,6 +3,7 @@ import { Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Loan } from '../../interfaces/loan';
 import { Loans } from '../../services/loans';
+import { Books } from '../../services/books';
 
 @Component({
   selector: 'app-maintenances-loans',
@@ -19,7 +20,7 @@ export class MaintenancesLoans {
 
   form: Loan = this.emptyForm();
 
-  constructor(private loanService: Loans){
+  constructor(private loanService: Loans, private bookService: Books){
     this.loanService.getLoans().subscribe(listedLoans => this.loans = listedLoans);
   }
 
@@ -62,8 +63,16 @@ export class MaintenancesLoans {
     this.close();
   }
 
-  remove(index: number, id: string) {
+  remove(index: number, id: string, bookId: string) {
     this.loanService.deleteLoan(id).subscribe();
+    this.bookService
+      .getBookById(bookId)
+      .subscribe(bookData => {
+        bookData.state = 'available';
+        this.bookService.updateBook({ ...bookData }).subscribe(data =>
+          console.log(data)
+        );
+      });
     this.loans.splice(index, 1);
   }
 

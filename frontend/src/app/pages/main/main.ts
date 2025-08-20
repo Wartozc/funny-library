@@ -6,6 +6,8 @@ import { Loan } from '../../interfaces/loan';
 import { Users } from '../../services/users';
 import { JwtPayload } from '../../interfaces/jwt';
 import { Router } from '@angular/router';
+import { Books } from '../../services/books';
+import { Loans } from '../../services/loans';
 
 @Component({
   selector: 'app-main',
@@ -14,38 +16,7 @@ import { Router } from '@angular/router';
   styleUrl: './main.scss',
 })
 export class Main implements OnInit {
-  books: Book[] = [
-    {
-      id: '',
-      title: 'El Quijote',
-      author: 'Miguel de Cervantes',
-      year: 1605,
-      description: 'Una de las obras más destacadas de la literatura universal.',
-      image: 'library.jpeg',
-      category: 'Novela',
-      state: 'available',
-    },
-    {
-      id: '',
-      title: 'Cien Años de Soledad',
-      author: 'Gabriel García Márquez',
-      year: 1967,
-      description: 'Historia de la familia Buendía en Macondo.',
-      image: 'library.jpeg',
-      category: 'Realismo mágico',
-      state: 'loaned',
-    },
-    {
-      id: '',
-      title: 'Clean Code',
-      author: 'Robert C. Martin',
-      year: 2008,
-      description: 'Guía para escribir código limpio y mantenible.',
-      image: 'library.jpeg',
-      category: 'Programación',
-      state: 'available',
-    },
-  ];
+  books: Book[] = [];
 
   filteredBooks: Book[] = [];
   selectedState: string = 'all';
@@ -66,7 +37,9 @@ export class Main implements OnInit {
   isUserAdmin: boolean = false;
   user: JwtPayload | null = null;
 
-  constructor(private userService: Users, private router: Router) {
+  constructor(private userService: Users, private router: Router,
+    private bookService: Books, private loanService: Loans
+  ) {
     const token = localStorage.getItem('jwt');
     this.user = userService.getUserRole(token!);
 
@@ -74,15 +47,20 @@ export class Main implements OnInit {
   }
 
   ngOnInit(): void {
-    this.filteredBooks = [...this.books];
-    this.categories = Array.from(new Set(this.books.map((b) => b.category)));
+    this.bookService.getBooks().subscribe((books) => this.updateBooks(books));
+  }
+
+  private updateBooks(books: Book[]) {
+    this.books = books;
+    this.filteredBooks = [...books];
+    this.categories = Array.from(new Set(books.map((b) => b.category)));
   }
 
   filterBooks() {
     this.filteredBooks = this.books.filter((book) => {
       const stateMatch = this.selectedState === 'all' || book.state === this.selectedState;
       const categoryMatch =
-        this.selectedCategory === 'all' || book.category === this.selectedCategory;
+      this.selectedCategory === 'all' || book.category === this.selectedCategory;
       return stateMatch && categoryMatch;
     });
   }
@@ -104,10 +82,13 @@ export class Main implements OnInit {
   }
 
   submitLoan() {
-    console.log('Préstamo registrado:', this.loan);
     if (this.selectedBook) {
       this.selectedBook.state = 'loaned';
+      console.log(this.selectedBook);
+      this.bookService.updateBook(this.selectedBook).subscribe();
+      this.loanService.registerLoan(this.loan).subscribe();
       this.filterBooks();
+
     }
 
     const modal = bootstrap.Modal.getInstance(document.getElementById('loanModal'));

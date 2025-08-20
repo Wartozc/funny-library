@@ -25,7 +25,7 @@
         <td>{{ loan.loanTime }}</td>
         <td class="text-center">
           <i class="bi bi-pencil-square text-primary me-3" role="button" (click)="openEdit(loan, i)"></i>
-          <i class="bi bi-trash text-danger" role="button" (click)="remove(i, loan.id)"></i>
+          <i class="bi bi-trash text-danger" role="button" (click)="remove(i, loan.id, loan.bookId)"></i>
         </td>
       </tr>
     </tbody>
