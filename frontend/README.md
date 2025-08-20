@@ -57,6 +57,7 @@ El frontend consume la API REST del backend para todas las operaciones. Si el ba
 ## Recursos adicionales
 
 - [Documentación oficial de Angular CLI](https://angular.dev/tools/cli)
+- [Manual de usuario](../Manual_usuario.md)
 
 ---
 
