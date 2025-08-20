@@ -1,3 +1,4 @@
+
 # Funny Library
 
 Este proyecto es una aplicación web completa que incluye un **backend** (Node.js + Express + MongoDB) y un **frontend** (Angular). Permite la gestión de usuarios, libros y préstamos de una biblioteca.
@@ -36,3 +37,4 @@ Consulta los README de [backend/README.md](backend/README.md) y [frontend/README
 
 Desarrollado por Walther Zapata Casas  
 © Walther Zapata Casas - 2025. Todos los derechos reservados.
+
