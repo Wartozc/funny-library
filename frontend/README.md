@@ -1,59 +1,64 @@
-# Frontend
+# Frontend - Funny Library
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 20.1.6.
+Este es el frontend de la aplicación **Funny Library**, desarrollado en **Angular 20.1.6**. Permite la gestión de usuarios, libros y préstamos de una biblioteca, interactuando con el backend mediante una API REST.
 
-## Development server
+## Requisitos previos
 
-To start a local development server, run:
+- Tener instalado [Node.js](https://nodejs.org/) y [Angular CLI](https://angular.dev/tools/cli).
+- Es **necesario** que el backend de Funny Library esté en ejecución antes de iniciar el frontend, ya que todas las operaciones dependen de la API.
 
-```bash
-ng serve
-```
+## Instalación
 
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
+1. Clona el repositorio y navega a la carpeta `frontend`:
+   ```bash
+   cd frontend
+   ```
+2. Instala las dependencias:
+   ```bash
+   npm install
+   ```
 
-## Code scaffolding
+## Levantar el servidor de desarrollo
 
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
+1. Asegúrate de que el backend esté corriendo (por ejemplo, en `http://localhost:3000`).
+2. Inicia el servidor de Angular:
+   ```bash
+   ng serve
+   ```
+3. Abre tu navegador en [http://localhost:4200](http://localhost:4200).
 
-```bash
-ng generate component component-name
-```
+La aplicación se recargará automáticamente al detectar cambios en los archivos fuente.
 
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
+## Estructura de rutas principales
 
-```bash
-ng generate --help
-```
+La aplicación utiliza rutas protegidas según el rol del usuario:
 
-## Building
+- `/login`: Página de inicio de sesión.
+- `/register`: Registro de nuevos usuarios.
+- `/forget-password`: Recuperación de contraseña.
+- `/main`: Página principal, muestra los libros y permite a los usuarios prestar libros.
+- `/maintenances`: Acceso solo para administradores. Permite gestionar:
+  - `/maintenances/users`: CRUD de usuarios.
+  - `/maintenances/books`: CRUD de libros.
+  - `/maintenances/loans`: CRUD de préstamos.
 
-To build the project run:
+> **Nota:** Solo los usuarios con rol `admin` pueden acceder a las rutas de mantenimiento.
 
-```bash
-ng build
-```
+## Dependencia con el backend
 
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
+El frontend consume la API REST del backend para todas las operaciones. Si el backend no está disponible, la aplicación no funcionará correctamente.
 
-## Running unit tests
+## Scripts útiles
 
-To execute unit tests with the [Karma](https://karma-runner.github.io) test runner, use the following command:
+- `ng serve`: Levanta el servidor de desarrollo.
+- `ng build`: Compila la aplicación para producción.
+- `ng test`: Ejecuta los tests unitarios.
 
-```bash
-ng test
-```
+## Recursos adicionales
 
-## Running end-to-end tests
+- [Documentación oficial de Angular CLI](https://angular.dev/tools/cli)
 
-For end-to-end (e2e) testing, run:
+---
 
-```bash
-ng e2e
-```
-
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
-
-## Additional Resources
-
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+Desarrollado por Walther Zapata Casas  
+© Walther Zapata Casas. Todos los derechos reservados.
