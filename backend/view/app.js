@@ -5,6 +5,7 @@ const authMiddleware = require("../controller/middlewares/authMiddleware.js");
 const userController = require("../controller/user-controller.js");
 const bookController = require("../controller/book-controller.js");
 const loanController = require("../controller/loan-controller.js");
+const seedBooks = require("../controller/seed.js").seedBooks;
 const cors = require("cors");
 
 require("dotenv").config()
@@ -31,6 +32,6 @@ const startServer = async () => {
       console.info(`Server listen in port ${process.env.PORT}`)
     );
 }
-
+seedBooks();
 startServer();
   
