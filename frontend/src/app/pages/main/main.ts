@@ -69,7 +69,7 @@ export class Main implements OnInit {
     this.selectedBook = book;
     this.loan = {
       id: '',
-      bookId: book.title + '-' + Math.random().toString(36).substring(2, 9),
+      bookId: book.id,
       documentNumberUser: '',
       bookName: book.title,
       userName: '',
@@ -84,7 +84,6 @@ export class Main implements OnInit {
   submitLoan() {
     if (this.selectedBook) {
       this.selectedBook.state = 'loaned';
-      console.log(this.selectedBook);
       this.bookService.updateBook(this.selectedBook).subscribe();
       this.loanService.registerLoan(this.loan).subscribe();
       this.filterBooks();

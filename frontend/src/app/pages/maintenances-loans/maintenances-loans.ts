@@ -59,6 +59,10 @@ export class MaintenancesLoans {
       this.loanService
         .registerLoan(this.form)
         .subscribe((loanUpdated) => this.loans.push({ ...loanUpdated }));
+      this.bookService.getBookById(this.form.bookId).subscribe((bookData) => {
+        bookData.state = 'loaned';
+        this.bookService.updateBook({ ...bookData }).subscribe();
+      });
     }
     this.close();
   }
@@ -69,9 +73,7 @@ export class MaintenancesLoans {
       .getBookById(bookId)
       .subscribe(bookData => {
         bookData.state = 'available';
-        this.bookService.updateBook({ ...bookData }).subscribe(data =>
-          console.log(data)
-        );
+        this.bookService.updateBook({ ...bookData }).subscribe();
       });
     this.loans.splice(index, 1);
   }

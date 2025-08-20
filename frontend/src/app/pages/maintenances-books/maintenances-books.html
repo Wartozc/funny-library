@@ -8,6 +8,7 @@
   <table class="table table-bordered table-hover text-center align-middle">
     <thead class="table-dark">
       <tr>
+        <th>ID Libro</th>
         <th>Imagen</th>
         <th>Título</th>
         <th>Autor</th>
@@ -19,6 +20,7 @@
     </thead>
     <tbody>
       <tr *ngFor="let book of books">
+        <td>{{ book.id }}</td>
         <td>
           <img [src]="book.image" alt="Imagen libro" width="50" height="70" class="rounded shadow-sm">
         </td>
@@ -49,6 +51,10 @@
       </div>
       <div class="modal-body">
         <form>
+          <div class="mb-3">
+            <label class="form-label">ID Libro</label>
+            <input class="form-control" [(ngModel)]="selectedBook!.id" name="id">
+          </div>
           <div class="mb-3">
             <label class="form-label">Título</label>
             <input class="form-control" [(ngModel)]="selectedBook!.title" name="title">
