@@ -2,6 +2,8 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable, signal } from '@angular/core';
 import { map, Observable, of } from 'rxjs';
 import { User } from '../interfaces/user';
+import { jwtDecode } from 'jwt-decode';
+import { JwtPayload } from '../interfaces/jwt';
 
 @Injectable({
   providedIn: 'root',
@@ -47,6 +49,14 @@ export class Users {
   logout() {
     localStorage.clear();
     window.location.href = '/login';
+  }
+
+  getUserRole(token: string): JwtPayload | null{
+    try {
+      return jwtDecode<JwtPayload>(token);
+    } catch (e) {
+      return null;
+    }
   }
 
   getJwt(): string {

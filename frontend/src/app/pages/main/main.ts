@@ -4,6 +4,8 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { Book } from '../../interfaces/book';
 import { Loan } from '../../interfaces/loan';
 import { Users } from '../../services/users';
+import { JwtPayload } from '../../interfaces/jwt';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-main',
@@ -57,13 +59,14 @@ export class Main implements OnInit {
     loanTime: 0,
   };
 
-  user = {
-    name: 'Walther Zapata',
-    email: 'wartozc@gmail.com',
-  };
+  isUserAdmin: boolean = false;
+  user: JwtPayload | null = null;
 
-  constructor(private userService: Users){
+  constructor(private userService: Users, private router: Router) {
+    const token = localStorage.getItem('jwt');
+    this.user = userService.getUserRole(token!);
 
+    if(this.user?.rol==='admin') this.isUserAdmin = true;
   }
 
   ngOnInit(): void {
@@ -83,7 +86,7 @@ export class Main implements OnInit {
   openLoanModal(book: Book) {
     this.selectedBook = book;
     this.loan = {
-      bookId: book.title + '-' + Math.random().toString(36).substring(2, 9), // id ficticio
+      bookId: book.title + '-' + Math.random().toString(36).substring(2, 9),
       documentNumberUser: '',
       bookName: book.title,
       userName: '',
@@ -107,6 +110,10 @@ export class Main implements OnInit {
   }
 
   logout() {
-    this.userService.logout()
+    this.userService.logout();
+  }
+
+  goToMaintenances(){
+    this.router.navigateByUrl('/maintenances');
   }
 }

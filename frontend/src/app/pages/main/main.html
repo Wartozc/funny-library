@@ -8,8 +8,11 @@
     </button>
     <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userMenuButton">
       <li class="dropdown-item-text">
-        <strong>{{ user.name }}</strong><br>
-        <small>{{ user.email }}</small>
+        <strong>{{ user?.userName }}</strong><br>
+        <small>{{ user?.email }}</small>
+        @if (isUserAdmin) {
+          <button class= "btn btn-outline-primary" (click)="goToMaintenances()">Mantenimientos</button>
+        }
       </li>
       <li><hr class="dropdown-divider"></li>
       <li>
@@ -20,7 +23,7 @@
 </div>
 
 
-  <h2 class="text-center mb-4">Funny Library - Libros Disponibles</h2>
+  <h1 class="text-center mb-4">Funny Library</h1>
 
   <div class="row mb-4">
     <div class="col-md-6">
